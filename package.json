@@ -1,0 +1,42 @@
+{
+  "name": "openscribble",
+  "version": "0.0.1",
+  "description": "Open Source Pictionary Game",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf dist && webpack --mode development --config webpack.server.config.js && webpack --mode development",
+    "start": "node ./dist/server.js"
+  },
+  "keywords": [
+    "Scribble",
+    "Pictionary",
+    "Game"
+  ],
+  "author": "ElectroMantis",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0",
+    "vue": "^2.6.11",
+    "vue-socket.io": "^3.0.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.2",
+    "dart-sass": "^1.25.0",
+    "file-loader": "^6.0.0",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.2.0",
+    "sass-loader": "^8.0.2",
+    "vue-loader": "^15.9.1",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
