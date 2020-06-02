@@ -1,21 +1,22 @@
 import path from 'path';
 import express from 'express';
 import http from 'http';
-import socket from 'socket.io';
 
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from '../../webpack.dev.config.js';
 
+import {setup as setupSockets} from '../server/includes/sockets';
+
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
 const compiler = webpack(config);
 
 const DIST_DIR = __dirname;
 const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
+// region webpack middleware stuff for HMR
 app.use(
   webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath
@@ -34,17 +35,10 @@ app.get('*', (req, res, next) => {
     res.end();
   });
 });
+// endregion
 
-io.on('connection', socket => {
-  socket.on('chat message', msg => {
-    io.emit('chat message', msg);
-  });
-
-  socket.on('pingServer', data => {
-    console.log('Pinged: ' + data);
-    io.emit('messageChannel', 'pinged on:' + Date.now());
-  });
-});
+// Set up the socket communications
+setupSockets(server);
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
