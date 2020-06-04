@@ -1,8 +1,10 @@
 {
-  "name": "openscribble",
+  "name": "mantis-sketch",
   "version": "0.0.1",
   "description": "Open Source Pictionary Game",
-  "main": "index.js",
+  "engines": {
+    "node": "11.x"
+  },
   "scripts": {
     "build": "rm -rf dist && webpack --mode production --config webpack.server.config.js && webpack --mode production --config webpack.prod.config.js",
     "start": "node ./dist/server.js",
