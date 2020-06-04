@@ -1,9 +1,30 @@
 <template>
     <div class="sign-in" v-if="isConnected && !player">
-        <form @submit.prevent="signIn()">
-            <input type="text" v-model="playerName" placeholder="Enter Your Name" required>
-            <input type="color" v-model="playerColor">
-            <button>Let's Go</button>
+        <form @submit.prevent="signIn()" class="form form--register">
+            <div class="avatar-wrap">
+                <canvas-avatar 
+                    :brush-color="playerColor"
+                    :brushSize="brushSize"
+                    :size-x="64"
+                    :size-y="64"
+                    v-model="playerAvatar"
+                />
+                <div class="label">Draw your Avatar</div>
+            </div>
+            <div class="field">
+                <label for="player-name">Player Name</label>
+                <input id="player-name" type="text" v-model="playerName" placeholder="Enter Your Name" required>
+            </div>
+            <div class="field">
+                <label for="player-color">Player Color</label>
+                <input id="player-color" type="color" v-model="playerColor">
+            </div>
+            <div class="field">
+                <label for="brush-size">Brush Size</label>
+                <input id="brush-size" type="range" v-model="brushSize" :min="2" :max="20">
+                <div class="field__value">{{brushSize}}</div>
+            </div>
+            <button class="button" type="submit">Let's Go</button>
         </form>
     </div>
     <div class="main-window" v-else-if="isConnected">
@@ -20,11 +41,15 @@
 
 <script>
 import { v1 as uuidv1 } from 'uuid';
+import { randomColor } from '../../util/colors';
+
 import TheChat from './components/TheChat.vue';
 import ThePlayerList from './components/ThePlayerList.vue';
 import TheToolbar from './components/TheToolbar.vue';
 import TheStatus from './components/TheStatus.vue';
 import TheBoard from './components/TheBoard.vue';
+
+import CanvasAvatar from './components/canvas/canvas-avatar.vue';
 
 export default {
     name: 'appRoot',
@@ -34,6 +59,8 @@ export default {
         TheBoard,
         TheToolbar,
         TheStatus,
+
+        CanvasAvatar,
     },
     data() {
         return {
@@ -44,6 +71,9 @@ export default {
             player: null,
             playerName: '',
             playerColor: '',
+            playerAvatar: null,
+
+            brushSize: 10,
         };
     },
     sockets: {
@@ -77,6 +107,7 @@ export default {
                 id: id,
                 name: this.playerName,
                 color: this.playerColor,
+                avatar: this.playerAvatar,
                 score: 0,
             };
             localStorage.setItem('playerID', id);
@@ -99,17 +130,70 @@ export default {
                 oldid: id,
             });
         }
+
+        this.playerColor = randomColor();
     }
 };
 </script>
 
 <style>
+html {
+    padding: 0;
+}
+
 body {
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     font-family: Sans-Serif;
+    height: 100vh;
+}
+
+img,
+canvas {
+    background: #fff;
+}
+
+canvas {
+    cursor: crosshair;
+}
+
+input,
+select,
+textarea {
+    background: transparent;
+    border: solid 2px;
+    color: inherit;
+    font-size: 1em;
+}
+
+.button {
+    background: transparent;
+    padding: 1em;
+    border-radius: 5px;
+    border: solid 2px;
+    color: inherit;
+    font-weight: bold;
+}
+
+*::-webkit-scrollbar {
+    width: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+    background: currentColor;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #333;
+        color: #ddd;
+    }
 }
 </style>
 
@@ -138,4 +222,62 @@ body {
 .status-wrap { grid-area: Status; }
 
 .powerups-wrap { grid-area: Powerups; }
+
+.form--register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form--register input {
+    margin-left: 15px;
+}
+
+.form--register .field {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.form--register .avatar-canvas {
+    margin-bottom: 8px;
+}
+
+.form--register .avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.field input[type='text'] {
+    border: 0;
+    border-bottom: 2px solid;
+    padding: 0;
+    padding-bottom: 0.5em;
+}
+
+.field input[type='color'] {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 100px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.field + .button {
+    margin-top: 1em;
+}
+
+.field__value {
+    margin-left: 8px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
 </style>
