@@ -1,3 +1,5 @@
+![](https://github.com/Electro-Mantis/mantis-sketch/workflows/Deploy/badge.svg)
+
 ## To Install:
 run `yarn install`
 
