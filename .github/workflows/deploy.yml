@@ -44,5 +44,3 @@ jobs:
         heroku_email: ${{secrets.HEROKU_EMAIL}}
         # The appname to use for deploying/updating
         heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-        # Will deploy using Dockerfile in project root.
-        usedocker: true
