@@ -2,10 +2,13 @@ import Vue from 'vue';
 import App from './vue/app.vue';
 import VueSocketIO from 'vue-socket.io';
 
+const url = window.location;
+const connectionUrl = url.protocol + '//' + url.host
+
 Vue.use(
   new VueSocketIO({
-    debug: true,
-    connection: 'http://localhost:8080'
+    debug: process.env.NODE_ENV === 'development',
+    connection: connectionUrl,
   })
 );
 
