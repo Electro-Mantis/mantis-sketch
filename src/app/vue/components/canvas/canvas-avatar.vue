@@ -11,6 +11,8 @@
     ></canvas>
 </template>
 <script>
+import PxBrush from 'px-brush';
+
 export default {
     name: 'CanvasAvatar',
     props: {
@@ -41,6 +43,8 @@ export default {
         return {
             isDrawing: false,
             context: null,
+            brush: null,
+            prevBrushPos: null,
             boundingRect: null,
         };
     },
@@ -58,13 +62,15 @@ export default {
     methods: {
         // Start the drawing
         paintStart(event) {
+            // Enable and start the drawing
             this.isDrawing = true;
             this.paintDraw(event);
         },
         // End drawing
         paintEnd(event) {
+            // Reset the drawing states
             this.isDrawing = false;
-            this.context.beginPath();
+            this.prevBrushPos = null;
 
             // Send the value of the image to our v-model
             this.$emit('input', this.$el.toDataURL('image/png'));
@@ -73,21 +79,37 @@ export default {
             // Cancel early if we are not drawing
             if(!this.isDrawing) return
 
-            // Draw our line between previous mouse pos and current mouse pos
-            this.context.lineTo(event.clientX - this.boundingRect.left, event.clientY - this.boundingRect.top)
-            this.context.stroke();
-            this.context.beginPath()
-            this.context.moveTo(event.clientX - this.boundingRect.left, event.clientY - this.boundingRect.top)
+            // Get our current brush pos, if we don't have a prev pos, set it to current pos
+            const currentBrushPos = this.getCanvasPos(event);
+            if ( !this.prevBrushPos ) {
+                this.prevBrushPos = currentBrushPos;
+            }
+
+            // use pxBrush to draw a line from prev pos to current pos
+            this.brush.draw({
+                from: this.prevBrushPos,
+                to: currentBrushPos,
+                size: this.brushSize,
+                color: this.brushColor,
+            });
+
+            // Set our prev pos to current pos
+            this.prevBrushPos = currentBrushPos;
         },
+
+        getCanvasPos(event) {
+            return {
+                x: event.clientX - this.boundingRect.left,
+                y: event.clientY - this.boundingRect.top,
+            }
+        }
     },
     mounted() {
         // Set up our canvas context
         this.context = this.$el.getContext('2d');
 
-        // Set up initial canvas config
-        this.context.strokeStyle = this.brushColor;
-        this.context.lineWidth = this.brushSize;
-        this.context.lineCap = 'round';
+        // Set up our Pixel Brush
+        this.brush = new PxBrush(this.$el);
 
         // Get our bounding rect (for mouse calculations)
         this.boundingRect = this.$el.getBoundingClientRect();
@@ -103,5 +125,9 @@ export default {
     display: block;
     border: 2px solid;
     border-radius: 1000px;
+}
+
+.avatar-canvas:focus {
+    outline: none!important;
 }
 </style>
