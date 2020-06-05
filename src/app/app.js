@@ -12,6 +12,9 @@ Vue.use(
   })
 );
 
+
+console.log('env', process.env.NODE_ENV);
+
 new Vue({
   el: '#app',
   render(output) {
