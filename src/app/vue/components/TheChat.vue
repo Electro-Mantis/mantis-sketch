@@ -154,6 +154,10 @@ export default {
     padding-bottom: 10px;
     opacity: .5;
     font-style: italic;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 .chat-item--notification {
