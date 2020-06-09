@@ -1,6 +1,17 @@
 import socket from 'socket.io';
+import {getObjectIndex} from '../../shared/object';
+
 let playerList = [];
 let playerLimbo = [];
+
+const updatePlayer = function(id, attrs) {
+    const index = getObjectIndex(playerList, 'id', id);
+    const keys = Object.keys(attrs);
+    
+    keys.forEach(key => {
+        playerList[index][key] = attrs[key];
+    });
+}
 
 const setup = function(server) {
     const io = socket(server);
@@ -20,13 +31,14 @@ const setup = function(server) {
                 console.log('Retrieved Player', player);
                 returnMessage = 'Welcome back, ' + player.name + ' 👋';
 
-                socket.emit('retrievePlayerData', player);
 
                 // We don't have a valid player obj, but we were still given an old id. We exit out in this case.
             } else if (player.oldid) {
                 console.log(player.oldid, 'has expired. Not signing in.');
                 return;
             }
+
+            socket.emit('retrievePlayerData', player);
 
             // Alert the chat of the new player
             // Our message hasn't been written yet, welcome the new player.
@@ -61,7 +73,28 @@ const setup = function(server) {
 
         socket.on('message', data => {
             data['time'] = Date.now();
+            if (data.playerID) {
+                console.log('we have an id');
+                const player = playerList.filter(p => p.id === data.playerID)[0];
+                data['player'] = {
+                    id: player.playerID,
+                    name: player.name,
+                    color: player.color,
+                };
+            }
+
+            console.log('message Data', data);
             io.emit('messageChannel', data);
+        });
+
+        socket.on('type-start', data => {
+            updatePlayer(data.id, {typing: true});
+            io.emit('refreshPlayers', playerList);
+        });
+
+        socket.on('type-end', data => {
+            updatePlayer(data.id, { typing: false });
+            io.emit('refreshPlayers', playerList);
         });
     });
 }

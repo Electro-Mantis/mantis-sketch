@@ -11,13 +11,16 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
+
 export default {
     name: 'ThePlayerList',
-    props: {
-        players: {
-            type: Array,
-            required: true,
-        }
+    computed: {
+        ...mapState('users', [
+            'player',
+            'players',
+            'typingPlayers',
+        ]),
     }
 }
 </script>

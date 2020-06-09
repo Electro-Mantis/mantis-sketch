@@ -5,19 +5,16 @@
                 <canvas-avatar 
                     :brush-color="playerColor"
                     :brushSize="brushSize"
-                    :size-x="64"
-                    :size-y="64"
+                    :size-x="128"
+                    :size-y="128"
                     v-model="playerAvatar"
                 />
                 <div class="label">Draw your Avatar</div>
             </div>
+            <tool-colorpicker v-model="playerColor" />
             <div class="field">
                 <label for="player-name">Player Name</label>
                 <input id="player-name" type="text" v-model="playerName" placeholder="Enter Your Name" required>
-            </div>
-            <div class="field">
-                <label for="player-color">Player Color</label>
-                <input id="player-color" type="color" v-model="playerColor">
             </div>
             <div class="field">
                 <label for="brush-size">Brush Size</label>
@@ -31,8 +28,8 @@
         <the-player-list :players="players"/>
         <the-status/>
         <the-board/>
-        <the-toolbar/>
-        <the-chat :messages="messages" :player="player"/>
+        <the-toolbar :color-value="playerColor" @input-color="playerColor = $event.value"/>
+        <the-chat/>
     </div>
     <div class="error" v-else>
         Loading...
@@ -40,8 +37,9 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
 import { v1 as uuidv1 } from 'uuid';
-import { randomColor } from '../../util/colors';
+import { randomColor } from '../util/colors';
 
 import TheChat from './components/TheChat.vue';
 import ThePlayerList from './components/ThePlayerList.vue';
@@ -50,6 +48,8 @@ import TheStatus from './components/TheStatus.vue';
 import TheBoard from './components/TheBoard.vue';
 
 import CanvasAvatar from './components/canvas/canvas-avatar.vue';
+
+import ToolColorpicker from './components/tools/tool-colorpicker.vue';
 
 export default {
     name: 'appRoot',
@@ -61,11 +61,12 @@ export default {
         TheStatus,
 
         CanvasAvatar,
+
+        ToolColorpicker,
     },
     data() {
         return {
             isConnected: false,
-            messages: [],
             players: [],
 
             player: null,
@@ -83,14 +84,6 @@ export default {
 
         disconnect() {
             this.isConnected = false;
-        },
-
-        messageChannel(data) {
-            this.messages.push(data);
-        },
-
-        refreshPlayers(list) {
-            this.$set(this, 'players', list);
         },
 
         retrievePlayerData(player) {
@@ -166,6 +159,17 @@ textarea {
     border: solid 2px;
     color: inherit;
     font-size: 1em;
+}
+
+.sr-only {
+position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }
 
 .button {
@@ -271,13 +275,5 @@ textarea {
 
 .field__value {
     margin-left: 8px;
-}
-
-input[type="color"]::-webkit-color-swatch-wrapper {
-	padding: 0;
-}
-
-input[type="color"]::-webkit-color-swatch {
-	border: none;
 }
 </style>
