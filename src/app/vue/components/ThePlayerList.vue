@@ -5,6 +5,7 @@
                 <img class="player__avatar" :src="player.avatar" alt="Plater Avatar">
                 <div class="player__name" :style="{color: player.color}">{{player.name}}</div>
                 <div class="player__score">Score: {{player.score}}</div>
+                <div class="player__indicator" v-if="player.typing" >💬</div>
             </li>
         </ul>
     </div>
@@ -38,12 +39,11 @@ export default {
 
 .player {
     display: grid;
-    grid-template-columns: 45px 1fr;
+    grid-template-columns: 45px 1fr auto;
     grid-template-rows: 1fr .5fr;
-    grid-template-areas: "avatar name" "avatar score";
+    grid-template-areas: "avatar name icon" "avatar score icon";
     align-items: center;
     grid-gap: 0 16px;
-    margin-right: -8px;
 }
 
 .player + .player {
@@ -65,13 +65,20 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-right: 8px;
+    font-size: 1.25em;
 }
 
 .player__score {
     grid-area: score;
-    border-top: 2px solid;
-    padding-top: .25em;
     font-weight: bold;
+    opacity: .5;
+}
+
+.player__indicator {
+    grid-area: icon;
+    font-size: 1.5em;
+    justify-self: center;
+    align-self: center;
+    line-height: 1;
 }
 </style>

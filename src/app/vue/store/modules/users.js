@@ -21,7 +21,7 @@ export default {
 
     getters: {
         typingPlayers(state) {
-            return state.players.filter(p => p.typing);
+            return state.players.filter(p => p.typing && p.id !== state.player.id);
         },
     },
 
