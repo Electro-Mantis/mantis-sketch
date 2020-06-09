@@ -1,34 +1,24 @@
 <template>
     <div class="toolbar-wrap">
-        <tool-colorpicker v-model="internalColorValue" />
+        <tool-colorpicker/>
+        <tool-brushsize/>
     </div>
 </template>
 <script>
 import ToolColorpicker from './tools/tool-colorpicker.vue';
+import ToolBrushsize from './tools/tool-brushsize.vue';
 
 export default {
     name: 'TheToolbar',
     components: {
         ToolColorpicker,
-    },
-    props: {
-        colorValue: {
-            required: true,
-            type: String,
-        }
+        ToolBrushsize,
     },
     data() {
         return {
-            internalColorValue: '',
         };
     },
-    watch: {
-        internalColorValue() {
-            this.$emit('inputColor', this.internalColorValue);
-        }
-    },
     mounted() {
-        this.internalColorValue = this.colorValue;
     }
 }
 </script>

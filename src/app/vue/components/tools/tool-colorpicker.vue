@@ -2,41 +2,53 @@
     <div class="color-picker">
         <div class="main-picker">
             <label class="sr-only" for="player-color">Player Color</label>
-            <input class="color color--custom" id="player-color" type="color" v-model="internalValue">
+            <input class="color color--custom" id="player-color" type="color" v-model="color">
         </div>
         <div class="palette">
-            <button class="color" type="button" v-for="color in palette" :key="color" :style="{background: color}" :value="color" @click="internalValue = color"></button>
+            <button class="color" type="button" v-for="thisColor in palette" :key="thisColor" :style="{background: thisColor}" :value="thisColor" @click="setColor(thisColor)"></button>
         </div>
     </div>
 </template>
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import Color from 'color';
 
 export default {
     name:"ToolColorpicker",
-    props:{
-        value: {
-            required: true,
-            type: String,
-            default: '#000'
-        }
-    },
     data() {
         return {
-            internalValue: '',
             palette: [],
         };
     },
-    watch: {
-        internalValue() {
-            this.$emit('input', this.internalValue);
+    computed: {
+        color: {
+            get() {
+                return this.$store.state.draw.color;
+            },
+            set(value) {
+                this.setColor(value);
+            },
+        },
+        size: {
+            get() {
+                return this.$store.state.draw.size;
+            },
+            set(value) {
+                this.setSize(value);
+            },
         }
     },
+    methods: {
+        ...mapMutations('draw', [
+            'setSize',
+            'setColor',
+        ]),
+    },
     mounted() {
-        this.internalValue = this.value;
-        const color = Color('#e23232');
+        // Set up palette colors
+        const startColor = Color('#e23232');
         for (let i = 0; i <= 255; i += 16) {
-            this.palette.push(color.hsl().hue(i).hex());
+            this.palette.push(startColor.hsl().hue(i).hex());
         }
         this.palette.push('#ffffff');
         this.palette.push('#000000');

@@ -3,24 +3,21 @@
         <form @submit.prevent="signIn()" class="form form--register">
             <div class="avatar-wrap">
                 <canvas-avatar 
-                    :brush-color="playerColor"
-                    :brushSize="brushSize"
+                    :brush-color="color"
+                    :brushSize="size"
                     :size-x="128"
                     :size-y="128"
                     v-model="playerAvatar"
                 />
                 <div class="label">Draw your Avatar</div>
             </div>
-            <tool-colorpicker v-model="playerColor" />
+            <tool-colorpicker/>
+            <tool-brushsize/>
             <div class="field">
                 <label for="player-name">Player Name</label>
                 <input id="player-name" type="text" v-model="playerName" placeholder="Enter Your Name" required>
             </div>
-            <div class="field">
-                <label for="brush-size">Brush Size</label>
-                <input id="brush-size" type="range" v-model="brushSize" :min="2" :max="20">
-                <div class="field__value">{{brushSize}}</div>
-            </div>
+            
             <button class="button" type="submit">Let's Go</button>
         </form>
     </div>
@@ -28,7 +25,7 @@
         <the-player-list :players="players"/>
         <the-status/>
         <the-board/>
-        <the-toolbar :color-value="playerColor" @input-color="playerColor = $event.value"/>
+        <the-toolbar/>
         <the-chat/>
     </div>
     <div class="error" v-else>
@@ -37,7 +34,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import { v1 as uuidv1 } from 'uuid';
 import { randomColor } from '../util/colors';
 
@@ -50,6 +47,7 @@ import TheBoard from './components/TheBoard.vue';
 import CanvasAvatar from './components/canvas/canvas-avatar.vue';
 
 import ToolColorpicker from './components/tools/tool-colorpicker.vue';
+import ToolBrushsize from './components/tools/tool-brushsize.vue';
 
 export default {
     name: 'appRoot',
@@ -63,6 +61,7 @@ export default {
         CanvasAvatar,
 
         ToolColorpicker,
+        ToolBrushsize,
     },
     data() {
         return {
@@ -71,11 +70,28 @@ export default {
 
             player: null,
             playerName: '',
-            playerColor: '',
             playerAvatar: null,
 
             brushSize: 10,
         };
+    },
+    computed: {
+        color: {
+            get() {
+                return this.$store.state.draw.color;
+            },
+            set(value) {
+                this.setColor(value);
+            },
+        },
+        size: {
+            get() {
+                return this.$store.state.draw.size;
+            },
+            set(value) {
+                this.setSize(value);
+            },
+        }
     },
     sockets: {
         connect() {
@@ -91,6 +107,10 @@ export default {
         },
     },
     methods: {
+        ...mapMutations('draw', [
+            'setSize',
+            'setColor',
+        ]),
         getSavedID() {
             return localStorage.getItem('playerID');
         },
@@ -99,7 +119,7 @@ export default {
             this.player = {
                 id: id,
                 name: this.playerName,
-                color: this.playerColor,
+                color: this.color,
                 avatar: this.playerAvatar,
                 score: 0,
             };
@@ -162,14 +182,14 @@ textarea {
 }
 
 .sr-only {
-position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
 }
 
 .button {
@@ -209,7 +229,7 @@ position: absolute;
   box-sizing: border-box;
   padding: 15px;
   display: grid;
-  grid-template-columns: 200px 1fr 300px;
+  grid-template-columns: 250px 1fr 350px;
   grid-template-rows: 60px 600px 120px;
   grid-gap: 15px;
   grid-template-areas: "Players Status Chat" "Players Board Chat" "Players Tools Chat";

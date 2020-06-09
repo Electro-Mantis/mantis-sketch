@@ -11,6 +11,7 @@
     ></canvas>
 </template>
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import PxBrush from 'px-brush';
 
 export default {
@@ -29,14 +30,6 @@ export default {
             type: Number,
             required: true,
         },
-
-        brushSize: {
-            type: [Number, String],
-            default: 10,
-        },
-        brushColor: {
-            type: String,
-        },
     },
 
     data() {
@@ -49,13 +42,20 @@ export default {
         };
     },
 
+    computed: {
+        ...mapState('draw', [
+            'color',
+            'size',
+        ]),
+    },
+
     // Set the canvas settings as our properties change
     watch: {
-        brushColor() {
-            this.context.strokeStyle = this.brushColor;
+        color() {
+            this.context.strokeStyle = this.color;
         },
-        brushSize() {
-            this.context.lineWidth = this.brushSize;
+        size() {
+            this.context.lineWidth = this.size;
         },
     },
 
@@ -89,8 +89,8 @@ export default {
             this.brush.draw({
                 from: this.prevBrushPos,
                 to: currentBrushPos,
-                size: this.brushSize,
-                color: this.brushColor,
+                size: this.size,
+                color: this.color,
             });
 
             // Set our prev pos to current pos
