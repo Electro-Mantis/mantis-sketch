@@ -3,6 +3,8 @@ import {getObjectIndex} from '../../shared/object';
 
 let playerList = [];
 let playerLimbo = [];
+let drawHistory = [];
+
 
 const updatePlayer = function(id, attrs) {
     const index = getObjectIndex(playerList, 'id', id);
@@ -18,6 +20,7 @@ const setup = function(server) {
 
     io.on('connection', socket => {
 
+        // region Sign In/Out
         socket.on('sign-in', player => {
             // If we have an old id, try to retrieve it from limbo
             const retrievedPlayer = playerLimbo.filter(p => p.id == player.oldid)[0];
@@ -30,7 +33,6 @@ const setup = function(server) {
                 player = retrievedPlayer;
                 console.log('Retrieved Player', player);
                 returnMessage = 'Welcome back, ' + player.name + ' 👋';
-
 
                 // We don't have a valid player obj, but we were still given an old id. We exit out in this case.
             } else if (player.oldid) {
@@ -52,6 +54,9 @@ const setup = function(server) {
             // Add the new player to the chat and refresh the list for everybody.
             playerList.push(player);
             io.emit('refreshPlayers', playerList);
+
+            // If we have a drawing, then we need to send the drawing to our new player
+            socket.emit('drawHistory', drawHistory);
         });
 
         socket.on('sign-out', id => {
@@ -70,7 +75,9 @@ const setup = function(server) {
             playerList = playerList.filter(p => p.id !== id);
             io.emit('refreshPlayers', playerList);
         });
+        // endregion Sign In/Out
 
+        // region Messaging
         socket.on('message', data => {
             data['time'] = Date.now();
             if (data.playerID) {
@@ -96,6 +103,31 @@ const setup = function(server) {
             updatePlayer(data.id, { typing: false });
             io.emit('refreshPlayers', playerList);
         });
+        // endregion Messaging
+
+        // region Drawing
+        let previousBrushPos = null;
+        
+
+        socket.on('draw-input', data => {
+            // If we don't have prev brush pos, cache it, else get from cache
+            // This is to compensate for latency. The server stores the last known position
+            if(!previousBrushPos) {
+                previousBrushPos = data.from;
+            } else {
+                data.from = previousBrushPos;
+            }
+
+            drawHistory.push(data);
+            socket.broadcast.emit('syncDrawing', data);
+
+            previousBrushPos = data.to;
+        });
+
+        socket.on('draw-stop', () => {
+            previousBrushPos = null;
+        });
+        // endregion Drawing
     });
 }
 // endregion
