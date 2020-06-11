@@ -1,7 +1,7 @@
 <template>
     <div class="brush-size">
         <label for="brush-size" class="sr-only">Brush Size</label>
-        <input id="brush-size" type="range" v-model="size" :min="2" :max="20">
+        <input id="brush-size" type="range" v-model="size" :min="minSize" :max="maxSize">
         <div class="brush-size__value">{{size}}</div>
     </div>
 </template>
@@ -18,7 +18,11 @@ export default {
             set(value) {
                 this.setSize(value);
             },
-        }
+        },
+        ...mapState('draw', [
+            'minSize',
+            'maxSize',
+        ]),
     },
     methods: {
         ...mapMutations('draw', [

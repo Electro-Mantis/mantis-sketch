@@ -6,6 +6,8 @@ export default {
     state: {
         color: '#000000',
         size: 10,
+        minSize: 2,
+        maxSize: 60,
     },
 
     mutations: {
@@ -13,7 +15,7 @@ export default {
             Vue.set(state, 'color', payload);
         },
         setSize(state, payload) {
-            Vue.set(state, 'size', payload);
+            Vue.set(state, 'size', Math.min(Math.max(payload, state.minSize), state.maxSize));
         }
     }
 };

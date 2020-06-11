@@ -9,6 +9,7 @@
             @mouseup="paintEnd"
             @blur="paintEnd"
             @mousemove="paintDraw"
+            @wheel.prevent="scrollAction"
         ></canvas>
     </div>
 </template>
@@ -33,9 +34,17 @@ export default {
     },
 
     computed: {
+        size: {
+            get() {
+                return this.$store.state.draw.size;
+            },
+            set(value) {
+                this.setSize(value);
+            },
+        },
+
         ...mapState('draw', [
             'color',
-            'size',
         ]),
 
         ...mapState('users', [
@@ -54,6 +63,15 @@ export default {
     },
 
     methods: {
+        ...mapMutations('draw', [
+            'setSize',
+        ]),
+
+        scrollAction(event) {
+            console.log('SCROLL');
+            this.size += (event.deltaY > 0 ? 1 : -1);
+        },
+
         // Start the drawing
         paintStart(event) {
             // Enable and start the drawing
@@ -145,11 +163,13 @@ export default {
 .canvas-main {
     height: 100%;
     position: relative;
+    cursor: none;
 }
 
 .canvas-main canvas {
     width: 100%;
     height: 100%;
     display: block;
+    cursor: none;
 }
 </style>
