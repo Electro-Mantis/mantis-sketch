@@ -109,26 +109,34 @@ export default {
 
 <style scoped>
 .chat-wrap {
-    border: 2px solid;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     height: 1fr;
+    position: relative;
 }
 
 .chat-header {
     font-size: 25px;
-    padding: 15px;
+    padding: 16px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid;
+    background: var(--color-background);
+    border-radius: 16px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    position: relative;
 }
 
 .chat-list-wrap {
     flex: 1;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    background: var(--color-background);
+    border-radius: 16px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
 
 
@@ -142,7 +150,6 @@ export default {
     min-height: 100%;
 }
 
-.chat-typing,
 .chat-item {
     display: block;
     padding: 5px;
@@ -151,13 +158,16 @@ export default {
 }
 
 .chat-typing {
-    padding-bottom: 10px;
+    padding-top: 10px;
     opacity: .5;
     font-style: italic;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
 }
 
 .chat-item--notification {
@@ -181,13 +191,16 @@ export default {
 
 .chat-form {
     display: flex;
-    border-top: 2px solid;
+    margin-top: 16px;
 }
 
 .chat-form input {
     flex: 1;
-    padding: 5px;
+    padding: 16px;
+    box-shadow: 4px 4px 12px rgba(0,0,0,.05);
+    background: var(--color-background);
+    border-radius: 16px;
     border: 0;
-    border-radius: 0;
+    outline: none;
 }
 </style>

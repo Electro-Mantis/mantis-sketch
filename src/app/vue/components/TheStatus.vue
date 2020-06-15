@@ -12,7 +12,6 @@ export default {
 </script>
 <style scoped>
 .status-wrap {
-    border: 2px solid;
     padding: 16px;
     font-size: 1.5em;
     font-weight: bold;
@@ -20,5 +19,26 @@ export default {
     align-items: center;
     text-align: center;
     justify-content: center;
+    border-bottom: 16px solid var(--color-background);
+    position: relative;
+}
+
+.status-wrap::before,
+.status-wrap::after { 
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 32px;
+    height: 32px;
+}
+
+.status-wrap::before {
+    left: 0;
+    background: radial-gradient(circle at top right, transparent 32px, var(--color-background) 32px);
+}
+
+.status-wrap::after {
+    right: 0;
+    background: radial-gradient(circle at top left, transparent 32px, var(--color-background) 32px);
 }
 </style>

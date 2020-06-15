@@ -23,6 +23,7 @@
     </div>
     <div class="main-window" v-else-if="isConnected">
         <the-player-list :players="players"/>
+        <the-powerups/>
         <the-status/>
         <the-board/>
         <the-toolbar/>
@@ -43,6 +44,7 @@ import ThePlayerList from './components/ThePlayerList.vue';
 import TheToolbar from './components/TheToolbar.vue';
 import TheStatus from './components/TheStatus.vue';
 import TheBoard from './components/TheBoard.vue';
+import ThePowerups from './components/ThePowerups.vue';
 
 import CanvasAvatar from './components/canvas/canvas-avatar.vue';
 
@@ -57,6 +59,7 @@ export default {
         TheBoard,
         TheToolbar,
         TheStatus,
+        ThePowerups,
 
         CanvasAvatar,
 
@@ -150,6 +153,11 @@ export default {
 </script>
 
 <style>
+:root {
+    --color-background: rgb(47, 53, 59);
+    --color-font: white;
+}
+
 html {
     padding: 0;
 }
@@ -161,6 +169,8 @@ body {
     justify-content: center;
     font-family: Sans-Serif;
     height: 100vh;
+    background: #404851;
+    color: var(--color-font);
 }
 
 img,
@@ -196,9 +206,25 @@ textarea {
     background: transparent;
     padding: 1em;
     border-radius: 5px;
-    border: solid 2px;
     color: inherit;
     font-weight: bold;
+    border: 0;
+    box-shadow: 2px 2px 4px rgba(0,0,0,.25);
+    background: var(--color-background);
+    color: var(--color-font);
+}
+
+.button svg{
+    opacity: .5;
+}
+
+.button.active {
+    background: black;
+    color: white;
+}
+
+.button.active svg {
+    opacity: 1px;
 }
 
 *::-webkit-scrollbar {
@@ -212,13 +238,6 @@ textarea {
 *:hover::-webkit-scrollbar-thumb {
     background: currentColor;
 }
-
-@media (prefers-color-scheme: dark) {
-    body {
-        background: #333;
-        color: #ddd;
-    }
-}
 </style>
 
 <style scoped>
@@ -230,9 +249,8 @@ textarea {
   padding: 15px;
   display: grid;
   grid-template-columns: 250px 1fr 350px;
-  grid-template-rows: 60px 600px 120px;
-  grid-gap: 15px;
-  grid-template-areas: "Players Status Chat" "Players Board Chat" "Players Tools Chat";
+  grid-template-rows: 60px 600px 125px;
+  grid-template-areas: "Players Status Chat" "Players Board Chat" "Powerups Tools Chat";
 }
 
 .chat-wrap { grid-area: Chat; }

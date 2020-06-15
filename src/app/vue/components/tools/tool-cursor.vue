@@ -28,6 +28,9 @@ export default {
         ...mapState('draw', [
             'color',
             'size',
+        ]),
+        ...mapState('users', [
+            'player',
         ])
     }
 }
@@ -35,8 +38,8 @@ export default {
 <style scoped>
     .cursor {
         position: absolute;
-        top: -2px;
-        left: -2px;
+        top: 0;
+        left: 0;
         z-index: 100;
         pointer-events: none;
         box-sizing: border-box;
@@ -54,5 +57,20 @@ export default {
                     inset .05em .05em .1em rgba(0,0,0,.25);
         border-radius: 100%;
         box-sizing: border-box;
+    }
+
+    .cursor__label {
+        position: absolute;
+        top: calc(-50% - .5em);
+        height: 1em;
+        line-height: 1;
+        left: 8px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-shadow:
+            -1px -1px 0 white,  
+             1px -1px 0 white,
+            -1px 1px 0 white,
+             1px 1px 0 white;
     }
 </style>

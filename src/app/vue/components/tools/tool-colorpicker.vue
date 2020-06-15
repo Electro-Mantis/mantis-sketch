@@ -63,7 +63,8 @@ export default {
     overflow: hidden;
     padding: 0;
     font-size: 1.25em;
-    border: solid 2px;
+    border: 0;
+    box-shadow: 2px 2px 4px rgba(0,0,0,.25);
     color: inherit;
     display: inline-block;
     line-height: 1;
@@ -74,7 +75,7 @@ export default {
 }
 
 .color--custom {
-    font-size: 2.75em;
+    font-size: 3em;
     margin-right: 0.05em;
     margin-top: -.01em;
 }

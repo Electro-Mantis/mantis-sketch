@@ -28,13 +28,25 @@ export default {
 
 <style scoped>
 .player-wrap {
-    border: 2px solid;
+    background: linear-gradient(90deg, transparent 68px, var(--color-background) 68.1px);
+    border-top-right-radius: 1em;
+    position: relative;
+}
+
+.player-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 37px;
+    width: 32px;
+    height: 32px;
+    background: radial-gradient(circle at top left, transparent 32px, var(--color-background) 32px);
 }
 
 .players {
     list-style: none;
     margin: 0;
-    padding: 8px;
+    padding: 0;
 }
 
 .player {
@@ -44,6 +56,10 @@ export default {
     grid-template-areas: "avatar name icon" "avatar score icon";
     align-items: center;
     grid-gap: 0 16px;
+    padding: 8px;
+    background-color: var(--color-background);
+    border-radius: 500px;
+    color: var(--color-font);
 }
 
 .player + .player {

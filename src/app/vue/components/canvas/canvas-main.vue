@@ -28,7 +28,7 @@ export default {
             brush: null,
             prevBrushPos: null,
             boundingRect: null,
-            sizeX:836,
+            sizeX:870,
             sizeY:600,
         };
     },
@@ -171,5 +171,8 @@ export default {
     height: 100%;
     display: block;
     cursor: none;
+    border: 0;
+    outline: none;
+    border-radius: 16px;
 }
 </style>

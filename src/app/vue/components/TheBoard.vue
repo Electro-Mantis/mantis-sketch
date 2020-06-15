@@ -43,10 +43,12 @@ export default {
 
 <style scoped>
 .board-wrap {
-    border: solid 2px;
     height: 600px;
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
+    border: 0;
+    background: var(--color-background);
 }
 
 .overlay {

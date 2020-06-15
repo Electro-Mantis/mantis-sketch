@@ -35,6 +35,12 @@ export default {
 .brush-size {
     display: flex;
     align-items: center;
+    padding: 0 15px;
+    flex: 1;
+}
+
+.brush-size input {
+    flex: 1;
 }
 
 .brush-size__value {

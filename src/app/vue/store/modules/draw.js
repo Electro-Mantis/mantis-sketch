@@ -8,6 +8,7 @@ export default {
         size: 10,
         minSize: 2,
         maxSize: 60,
+        toolType: 'brush',
     },
 
     mutations: {
