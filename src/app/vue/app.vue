@@ -154,8 +154,17 @@ export default {
 
 <style>
 :root {
-    --color-background: rgb(47, 53, 59);
-    --color-font: white;
+    --c--black:#0c120c;
+    --c--gray: #4e504b;
+    --c--gray-dk: #343532;
+    --c--white: #eceafa;
+    --c--green: #8fb339;
+    --c--green-lt: #b7ce63;
+
+    --color-background: var(--c--gray-dk);
+    --color-font: var(--c--white);
+    --color-primary: var(--c--green);
+    --color-secondary: var(--c--green-lt);
 }
 
 html {
@@ -169,7 +178,7 @@ body {
     justify-content: center;
     font-family: Sans-Serif;
     height: 100vh;
-    background: #404851;
+    background: var(--c--gray);
     color: var(--color-font);
 }
 
@@ -189,6 +198,14 @@ textarea {
     border: solid 2px;
     color: inherit;
     font-size: 1em;
+    border: solid 2px transparent;
+    transition: color .25s, border-color .25s, background-color .25s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--color-secondary); 
 }
 
 .sr-only {
@@ -212,6 +229,9 @@ textarea {
     box-shadow: 2px 2px 4px rgba(0,0,0,.25);
     background: var(--color-background);
     color: var(--color-font);
+    cursor: pointer;
+    border: solid 2px transparent;
+    transition: color .25s, border-color .25s, background-color .25s;
 }
 
 .button svg{
@@ -219,12 +239,20 @@ textarea {
 }
 
 .button.active {
-    background: black;
-    color: white;
+    background: var(--color-primary);
+    color: var(--color-background);
+}
+
+.button:hover,
+.button:focus,
+.button:active,
+.button.active {
+    outline: none;
+    border-color: var(--color-secondary);
 }
 
 .button.active svg {
-    opacity: 1px;
+    opacity: 1;
 }
 
 *::-webkit-scrollbar {

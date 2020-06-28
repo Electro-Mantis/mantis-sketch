@@ -200,7 +200,6 @@ export default {
     box-shadow: 4px 4px 12px rgba(0,0,0,.05);
     background: var(--color-background);
     border-radius: 16px;
-    border: 0;
     outline: none;
 }
 </style>

@@ -28,6 +28,7 @@ export default {
 <style scoped>
 .toolbar-wrap {
     padding: 16px 32px;
+    padding-left: 24px;
     display: flex;
     align-items: center;
     border-top: 15px solid var(--color-background);

@@ -17,7 +17,24 @@ export default {
     name:"ToolColorpicker",
     data() {
         return {
-            palette: [],
+            palette: [
+                '#DC143C',
+                '#FF8C00',
+                '#FFFF00',
+                
+                '#32CD32',
+                '#008000',
+                '#40E0D0',
+                '#4169E1',
+                '#2424bb',
+                '#4B0082',
+                '#800080',
+
+                '#ffffff',
+                '#C0C0C0',
+                '#505050',
+                '#000000',
+            ],
         };
     },
     computed: {
@@ -43,15 +60,6 @@ export default {
             'setSize',
             'setColor',
         ]),
-    },
-    mounted() {
-        // Set up palette colors
-        const startColor = Color('#e23232');
-        for (let i = 0; i <= 255; i += 16) {
-            this.palette.push(startColor.hsl().hue(i).hex());
-        }
-        this.palette.push('#ffffff');
-        this.palette.push('#000000');
     }
 }
 </script>
@@ -75,23 +83,29 @@ export default {
 }
 
 .color--custom {
-    font-size: 3em;
-    margin-right: 0.05em;
-    margin-top: -.01em;
+    font-size: 3.1em;
+    box-sizing: border-box;
+    margin-bottom: 0;
 }
 
 .color-picker {
     display: flex;
+    background: var(--color-background);
+    border-radius: 40px;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
 }
 
 .palette {
-    width: 13.5em;
-    columns: 10;
+    width: 18.75em;
+    padding-right: .5em;
 }
 
 .palette .color {
-    margin-left: 0.25em;
-    margin-bottom: 0.25em;
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 input[type="color"]::-webkit-color-swatch-wrapper {
