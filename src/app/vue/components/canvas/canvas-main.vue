@@ -5,10 +5,10 @@
             tabindex="0"
             :width="sizeX"
             :height="sizeY"
-            @mousedown="paintStart"
-            @mouseup="paintEnd"
-            @blur="paintEnd"
-            @mousemove="paintDraw"
+            @mousedown="handleMouseDown"
+            @mouseup="handleMouseUp"
+            @blur="handleMouseUp"
+            @mousemove="handleMouseMove"
             @wheel.prevent="scrollAction"
         ></canvas>
     </div>
@@ -16,7 +16,10 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
+
 import PxBrush from 'px-brush';
+import 'floodfill';
+
 import { throttle } from '../../../../shared/debounce';
 
 export default {
@@ -45,6 +48,7 @@ export default {
 
         ...mapState('draw', [
             'color',
+            'toolType',
         ]),
 
         ...mapState('users', [
@@ -66,6 +70,41 @@ export default {
         ...mapMutations('draw', [
             'setSize',
         ]),
+
+        handleMouseDown(event) {
+            switch (this.toolType) {
+                case 'brush':
+                    this.paintStart(event);
+                    break;
+                case 'bucket':
+                    this.BucketFillCanvas(event);
+                    break;
+                case 'eraser':
+                    break;
+            }
+        },
+        handleMouseUp(event) {
+            switch (this.toolType) {
+                case 'brush':
+                    this.paintEnd(event);
+                    break;
+                case 'bucket':
+                    break;
+                case 'eraser':
+                    break;
+            }
+        },
+        handleMouseMove(event) {
+            switch (this.toolType) {
+                case 'brush':
+                    this.paintDraw(event);
+                    break;
+                case 'bucket':
+                    break;
+                case 'eraser':
+                    break;
+            }
+        },
 
         scrollAction(event) {
             console.log('SCROLL');
@@ -103,6 +142,7 @@ export default {
 
             // use pxBrush to draw a line from prev pos to current pos
             const brushData = {
+                type: 'brush',
                 from: this.prevBrushPos,
                 to: currentBrushPos,
                 size: this.size,
@@ -117,15 +157,45 @@ export default {
             this.prevBrushPos = currentBrushPos;
         },
 
-        drawCanvas(data) {
+        syncCanvas(data) {
+            switch (data.type) {
+                case 'brush':
+                    this.syncDraw(data);
+                    break;
+                case 'bucket':
+                    this.syncBucket(data);
+                    break;
+                case 'eraser':
+                    break;
+            }
+        },
+
+        syncDraw(data) {
             this.brush.draw(data);
+        },
+
+        syncBucket(data) {
+            this.context.fillStyle = data.color;
+            this.context.fillFlood(data.pos.x, data.pos.y, 32);
+        },
+
+        BucketFillCanvas(event) {
+            const pos = this.getCanvasPos(event);
+            this.context.fillStyle = this.color;
+            this.context.fillFlood(pos.x, pos.y, 32);
+
+            this.broadcastDrawInput({
+                type: 'bucket',
+                pos: pos,
+                color: this.color,
+            })
         },
 
         broadcastDrawInput: throttle(function(data) {
             data['id'] = this.player.id;
             this.$socket.emit('draw-input', data);
         }, 20),
-
+        
         getCanvasPos(event) {
             return {
                 x: event.clientX - this.boundingRect.left,
@@ -136,13 +206,13 @@ export default {
 
     sockets: {
         syncDrawing(data) {
-            this.drawCanvas(data);
+            this.syncCanvas(data);
         },
 
         drawHistory(history) {
             console.log('GOT HISTORY', history);
             history.forEach(step => {
-                this.drawCanvas(step);
+                this.syncCanvas(step);
             });
         }
     },
@@ -164,6 +234,8 @@ export default {
     height: 100%;
     position: relative;
     cursor: none;
+    border-radius: 16px;
+    overflow: hidden;
 }
 
 .canvas-main canvas {
@@ -173,6 +245,6 @@ export default {
     cursor: none;
     border: 0;
     outline: none;
-    border-radius: 16px;
+    margin-left: -1px;
 }
 </style>

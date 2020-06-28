@@ -112,7 +112,7 @@ const setup = function(server) {
         socket.on('draw-input', data => {
             // If we don't have prev brush pos, cache it, else get from cache
             // This is to compensate for latency. The server stores the last known position
-            if(!previousBrushPos) {
+            if(!previousBrushPos && data.from) {
                 previousBrushPos = data.from;
             } else {
                 data.from = previousBrushPos;
@@ -121,7 +121,9 @@ const setup = function(server) {
             drawHistory.push(data);
             socket.broadcast.emit('syncDrawing', data);
 
-            previousBrushPos = data.to;
+            if(data.to) {
+                previousBrushPos = data.to;
+            }
         });
 
         socket.on('draw-stop', () => {

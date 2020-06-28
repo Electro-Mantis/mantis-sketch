@@ -17,6 +17,9 @@ export default {
         },
         setSize(state, payload) {
             Vue.set(state, 'size', Math.min(Math.max(payload, state.minSize), state.maxSize));
-        }
+        },
+        setToolType(state, payload) {
+            Vue.set(state, 'toolType', payload);
+        },
     }
 };

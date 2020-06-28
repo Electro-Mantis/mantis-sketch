@@ -1,16 +1,25 @@
 <template>
     <div class="tool-type">
-        <button class="button" v-for="(type, key) in types" :key="key" :title="type.label">
+        <button :class="{'button': true, 'active': type.id === toolType}" v-for="(type, key) in types" :key="key" :title="type.label" @click="setToolType(type.id)">
             <i :class="type.icon"></i>
         </button>
     </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
+
 export default {
     name: 'ToolBrushtype',
     computed: {
-
+        toolType: {
+            get() {
+                return this.$store.state.draw.toolType;
+            },
+            set(value) {
+                this.setToolType(value);
+            },
+        }
     },
 
     data() {
@@ -18,22 +27,32 @@ export default {
             types: {
                 brush: {
                     label: 'Paintbrush',
+                    id: 'brush',
                     icon: 'fas fa-paint-brush',
                 },
                 bucket: {
                     label: 'Bucket Fill',
+                    id: 'bucket',
                     icon: 'fas fa-fill-drip',
                 },
                 eraser: {
                     label: 'Eraser',
+                    id: 'eraser',
                     icon: 'fas fa-eraser',
                 },
                 clear: {
                     label: 'Clear Image',
+                    id: 'clear',
                     icon: 'fas fa-trash-alt',
                 },
             }
         };
+    },
+
+    methods: {
+        ...mapMutations('draw', [
+            'setToolType',
+        ]),
     }
 }
 </script>
@@ -41,6 +60,7 @@ export default {
     .tool-type {
         display: flex;
         flex-wrap: wrap;
+        min-width: 85px;
     }
 
     .tool-type .button {
