@@ -48,7 +48,6 @@ export default {
     position: relative;
     box-sizing: border-box;
     border: 0;
-    background: var(--color-background);
 }
 
 .overlay {

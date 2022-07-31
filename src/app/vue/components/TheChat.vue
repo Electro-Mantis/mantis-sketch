@@ -4,7 +4,7 @@
             <div class="chat-header__name" :style="{color: player.color}">{{player.name}}</div>
             <div class="chat-header__score">{{player.score}}</div>
         </div>
-        <div class="chat-list-wrap" ref="chatlist">
+        <div class="chat-list-wrap window-module" ref="chatlist">
             <ul class="chat-list">
                 <li :class="{'chat-item': true, 'chat-item--notification': !message.player}" v-for="message in messages" :key="message.time">
                     <div v-if="message.player" class="chat-item__name" :style="{color: message.player.color}">{{message.player.name}}</div>
@@ -16,7 +16,7 @@
         <div class="chat-typing" v-if="typingString !== ''">{{typingString}}</div>
         
         <form class="chat-form" @submit.prevent="sendMessage()">
-            <input type="text" v-model="messageInput" @input="setTypingActive" @keyup="setTypingInactive">
+            <input class="window-module" type="text" v-model="messageInput" @input="setTypingActive" @keyup="setTypingInactive" placeholder="Type here to Guess / Chat">
         </form>
     </div>
 </template>
@@ -122,7 +122,7 @@ export default {
     display: flex;
     justify-content: space-between;
     background: var(--color-background);
-    border-radius: 16px;
+    /* border-radius: 16px; */
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     position: relative;
@@ -132,11 +132,8 @@ export default {
     flex: 1;
     overflow-y: scroll;
     overflow-x: hidden;
-
     background: var(--color-background);
-    border-radius: 16px;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
+    margin-top: 0.75rem;
 }
 
 
@@ -155,6 +152,7 @@ export default {
     padding: 5px;
     padding-left: 15px;
     position: relative;
+    border-top: solid 2px #ededed;
 }
 
 .chat-typing {
@@ -176,7 +174,7 @@ export default {
 }
 
 .chat-item:nth-child(odd) {
-    background-color: rgba(0,0,0,.05);
+    background-image: var(--background-stripes);
 }
 
 .chat-item__name {
@@ -197,9 +195,7 @@ export default {
 .chat-form input {
     flex: 1;
     padding: 16px;
-    box-shadow: 4px 4px 12px rgba(0,0,0,.05);
     background: var(--color-background);
-    border-radius: 16px;
     outline: none;
 }
 </style>

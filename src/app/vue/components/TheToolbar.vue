@@ -1,5 +1,5 @@
 <template>
-    <div class="toolbar-wrap">
+    <div class="toolbar-wrap window-module">
         <tool-colorpicker/>
         <tool-brushsize/>
         <tool-brushtype/>
@@ -27,30 +27,9 @@ export default {
 </script>
 <style scoped>
 .toolbar-wrap {
-    padding: 16px 32px;
-    padding-left: 24px;
+    padding: 1rem;
     display: flex;
     align-items: center;
-    border-top: 15px solid var(--color-background);
-    border-bottom: 0;
     position: relative;
-}
-.toolbar-wrap::before,
-.toolbar-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 32px;
-    height: 32px;
-}
-
-.toolbar-wrap::before {
-    left: 0;
-    background: radial-gradient(circle at bottom right, transparent 32px, var(--color-background) 32px);
-}
-
-.toolbar-wrap::after {
-    right: 0;
-    background: radial-gradient(circle at bottom left, transparent 32px, var(--color-background) 32px);
 }
 </style>

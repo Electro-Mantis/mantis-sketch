@@ -234,7 +234,6 @@ export default {
     height: 100%;
     position: relative;
     cursor: none;
-    border-radius: 16px;
     overflow: hidden;
 }
 
@@ -246,5 +245,8 @@ export default {
     border: 0;
     outline: none;
     margin-left: -1px;
+    background: white;
+    background-image: radial-gradient(var(--color-border) 1px, transparent 0);
+    background-size: 40px 40px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="status-wrap">
+    <div class="status-wrap window-module">
         <div class="status-label">
             Waiting for Players - Doodle while you wait
         </div>
@@ -19,13 +19,12 @@ export default {
     align-items: center;
     text-align: center;
     justify-content: center;
-    border-bottom: 16px solid var(--color-background);
     position: relative;
 }
 
 .status-wrap::before,
 .status-wrap::after { 
-    content: '';
+    /* content: ''; */
     position: absolute;
     bottom: 0;
     width: 32px;

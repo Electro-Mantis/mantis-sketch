@@ -124,7 +124,6 @@ export default {
 .avatar-canvas {
     display: block;
     border: 2px solid;
-    border-radius: 1000px;
 }
 
 .avatar-canvas:focus {

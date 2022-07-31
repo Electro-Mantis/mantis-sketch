@@ -65,55 +65,66 @@ export default {
 </script>
 <style scoped>
 .color {
-    width: 1em;
-    height: 1em;
-    border-radius: 100%;
+    width: 1.25rem;
+    height: 1.25rem;
     overflow: hidden;
     padding: 0;
-    font-size: 1.25em;
     border: 0;
-    box-shadow: 2px 2px 4px rgba(0,0,0,.25);
     color: inherit;
     display: inline-block;
     line-height: 1;
+    cursor: pointer;
+    border: 2px solid;
 }
 
 .color:focus {
     outline: none;
 }
 
+.color:hover {
+    box-shadow: 2px 2px var(--color-border);
+    transform: translate(-2px, -2px);
+}
+
 .color--custom {
-    font-size: 3.1em;
+    width: 3rem;
+    height: 3rem;
     box-sizing: border-box;
     margin-bottom: 0;
+    appearance: none;
+}
+
+.color--custom:hover {
+    box-shadow: 4px 4px var(--color-border);
+    transform: translate(-4px, -4px);
+}
+
+::-moz-color-swatch {
+    border-color: transparent;
 }
 
 .color-picker {
     display: flex;
-    background: var(--color-background);
-    border-radius: 40px;
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
-    padding-top: 0.5em;
-    padding-left: 0.5em;
+    gap: .5rem;
 }
 
 .palette {
-    width: 18.75em;
-    padding-right: .5em;
-}
-
-.palette .color {
-    margin-left: 0.5em;
-    margin-bottom: 0.5em;
+    display: grid;
+    grid-template-columns: repeat(10, auto);
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 18em;
+    align-self: flex-start;
+    gap: .5rem;
 }
 
 input[type="color"]::-webkit-color-swatch-wrapper {
 	padding: 0;
+    border: 0;
+    outline: 0;
 }
 
 input[type="color"]::-webkit-color-swatch {
 	border: none;
-    color: #e23232;
 }
 </style>

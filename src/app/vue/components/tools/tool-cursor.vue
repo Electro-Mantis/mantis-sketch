@@ -52,9 +52,8 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%,-50%);
-        border: 2px solid white;
-        box-shadow: .05em .05em .1em rgba(0,0,0,.25),
-                    inset .05em .05em .1em rgba(0,0,0,.25);
+        box-shadow: 2px 2px var(--color-border),
+                    inset 1px 1px black;
         border-radius: 100%;
         box-sizing: border-box;
     }

@@ -153,18 +153,29 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
+
 :root {
     --c--black:#0c120c;
-    --c--gray: #4e504b;
-    --c--gray-dk: #343532;
+    --c--gray: #5c6880;
+    --c--gray-dk: #2d3e64;
     --c--white: #eceafa;
-    --c--green: #8fb339;
-    --c--green-lt: #b7ce63;
 
-    --color-background: var(--c--gray-dk);
-    --color-font: var(--c--white);
-    --color-primary: var(--c--green);
-    --color-secondary: var(--c--green-lt);
+    --color-background: white;
+    --color-module: white;
+    --color-border: #28300a;
+    --color-font: #28300a;
+    --color-primary: #bada55;
+    --color-secondary: #28300a;
+
+    --background-stripes: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        #ededed 10px,
+        #ededed 11px,
+        transparent 12px
+    );
 }
 
 html {
@@ -180,6 +191,9 @@ body {
     height: 100vh;
     background: var(--c--gray);
     color: var(--color-font);
+    background-color: var(--color-background);
+    font-family: 'IBM Plex Mono', monospace;
+    box-shadow: inset 0 0 0 10px var(--color-border);
 }
 
 img,
@@ -195,10 +209,9 @@ input,
 select,
 textarea {
     background: transparent;
-    border: solid 2px;
+    border: solid 2px var(--color-border);
     color: inherit;
     font-size: 1em;
-    border: solid 2px transparent;
     transition: color .25s, border-color .25s, background-color .25s;
 }
 
@@ -222,24 +235,16 @@ textarea:focus {
 .button {
     background: transparent;
     padding: 1em;
-    border-radius: 5px;
     color: inherit;
     font-weight: bold;
-    border: 0;
-    box-shadow: 2px 2px 4px rgba(0,0,0,.25);
+    border: solid 2px var(--color-border);
     background: var(--color-background);
     color: var(--color-font);
     cursor: pointer;
-    border: solid 2px transparent;
-    transition: color .25s, border-color .25s, background-color .25s;
-}
-
-.button svg{
-    opacity: .5;
 }
 
 .button.active {
-    background: var(--color-primary);
+    background: var(--color-border);
     color: var(--color-background);
 }
 
@@ -266,17 +271,65 @@ textarea:focus {
 *:hover::-webkit-scrollbar-thumb {
     background: currentColor;
 }
+
+input[type=range] {
+  -webkit-appearance: none;
+  margin: 18px 0;
+  width: 100%;
+  border: 0;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: .5rem;
+  cursor: pointer;
+  background: var(--color-border);
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 2px 2px var(--color-border);
+  border: 2px solid var(--color-border);
+  height: 1.5rem;
+  width: .75rem;
+  background: var(--color-background);
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -.5rem;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: .5rem;
+  cursor: pointer;
+  background: var(--color-border);
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 2px 2px var(--color-border);
+  border: 2px solid var(--color-border);
+  height: 1.5rem;
+  width: .75rem;
+  background: var(--color-background);
+  cursor: pointer;
+  appearance: none;
+  margin-top: -.5rem;
+  border-radius: 0;
+}
+
+.window-module {
+    background-color: var(--color-module);
+    border: solid 2px var(--color-border);
+    background-image: var(--background-stripes);
+    box-shadow: .25rem .25rem 0 var(--color-border);
+}
 </style>
 
 <style scoped>
 .main-window {
-  width: 1500px;
+  width: 1300px;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
-  padding: 15px;
+  padding: 1rem;
+  gap: 1rem;
   display: grid;
-  grid-template-columns: 250px 1fr 350px;
+  grid-template-columns: 250px 1fr 300px;
   grid-template-rows: 60px 600px 125px;
   grid-template-areas: "Players Status Chat" "Players Board Chat" "Powerups Tools Chat";
 }
